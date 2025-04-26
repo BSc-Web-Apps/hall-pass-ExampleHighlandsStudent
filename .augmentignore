@@ -1,0 +1,11 @@
+# Dependencies
+!node_modules/
+
+# Build outputs
+dist/
+build/
+.expo/
+web-build/
+
+# Cache
+.cache/
