@@ -1,19 +1,18 @@
 import * as React from "react";
 import { TouchableOpacity, View } from "react-native";
+import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
-import { Text } from "~/components/ui/text";
 import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
-  DialogTrigger,
-  DialogDescription,
 } from "~/components/ui/dialog";
-import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { Text } from "~/components/ui/text";
 
 interface TaskProps {
   title: string;
