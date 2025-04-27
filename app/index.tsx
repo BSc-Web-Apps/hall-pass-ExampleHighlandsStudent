@@ -23,54 +23,59 @@ interface TaskProps {
 }
 function Task({ title, category, isChecked, onEdit }: TaskProps) {
   const [checked, setChecked] = React.useState(isChecked);
+  const [showDialog, setShowDialog] = React.useState(false);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <TouchableOpacity className="flex flex-row w-full" delayLongPress={500}>
-          <View className="px-8 py-5 flex w-24 h-full">
-            <Checkbox
-              className="border-foreground checked:bg-foreground"
-              checked={checked}
-              onCheckedChange={setChecked}
-            />
-          </View>
-          <View className="py-4 flex gap-1 flex-1 h-full border-b border-foreground-transparent">
-            <Text className="text-foreground text-xl">{title}</Text>
-            <Text className="text-foreground-transparent text-xl">
-              {category}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </DialogTrigger>
-
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit Task</DialogTitle>
-          <DialogDescription>
-            Make changes to your task details here.
-          </DialogDescription>
-        </DialogHeader>
-
-        <View className="gap-4">
-          <Input defaultValue={title} placeholder="Task title" />
-          <Input defaultValue={category} placeholder="Category" />
+    <>
+      <TouchableOpacity
+        className="flex flex-row w-full"
+        delayLongPress={500}
+        onLongPress={() => setShowDialog(true)}
+      >
+        <View className="px-8 py-5 flex w-24 h-full">
+          <Checkbox
+            className="border-foreground checked:bg-foreground"
+            checked={checked}
+            onCheckedChange={setChecked}
+          />
         </View>
+        <View className="py-4 flex gap-1 flex-1 h-full border-b border-foreground-transparent">
+          <Text className="text-foreground text-xl">{title}</Text>
+          <Text className="text-foreground-transparent text-xl">
+            {category}
+          </Text>
+        </View>
+      </TouchableOpacity>
 
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">
-              <Text>Cancel</Text>
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button>
-              <Text>Save changes</Text>
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Task</DialogTitle>
+            <DialogDescription>
+              Make changes to your task details here.
+            </DialogDescription>
+          </DialogHeader>
+
+          <View className="gap-4">
+            <Input defaultValue={title} placeholder="Task title" />
+            <Input defaultValue={category} placeholder="Category" />
+          </View>
+
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">
+                <Text>Cancel</Text>
+              </Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button>
+                <Text>Save changes</Text>
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
