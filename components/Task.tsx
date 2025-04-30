@@ -26,7 +26,7 @@ export default function Task({ task: propTask }: TaskProps) {
   return (
     <>
       <TouchableOpacity
-        className="flex flex-row w-full bg-gray-800"
+        className="flex flex-row w-full"
         delayLongPress={500}
         onLongPress={() => setShowDialog(true)}
       >

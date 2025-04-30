@@ -1,5 +1,6 @@
 import * as React from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
+import AddTask from "~/components/AddTask";
 import Task from "~/components/Task";
 
 export default function HomeScreen() {
@@ -11,10 +12,20 @@ export default function HomeScreen() {
   ];
 
   return (
-    <View className="flex-1 justify-center items-center gap-5 p-6 bg-background">
-      {tasks.map((task) => (
-        <Task key={task.id} task={task} />
-      ))}
+    <View className="flex-1 flex items-center gap-5 p-6 bg-background">
+      <View>
+        <Text className="pt-20 text-foreground font-bold text-6xl">
+          HallPass
+        </Text>
+      </View>
+      <View>
+        {tasks.map((task) => (
+          <Task key={task.id} task={task} />
+        ))}
+      </View>
+      <View className="absolute inset-x-0 bottom-0 flex items-center z-50">
+        <AddTask />
+      </View>
     </View>
   );
 }

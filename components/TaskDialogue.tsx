@@ -26,6 +26,8 @@ export default function TaskDialog({
   setShowDialog,
   showDialog,
 }: TaskDialogProps) {
+  const isNewTask = task.title === "" && task.category === "";
+
   const [editedTitle, setEditedTitle] = React.useState(task.title);
   const [editedCategory, setEditedCategory] = React.useState(task.category);
 
@@ -53,9 +55,11 @@ export default function TaskDialog({
     <Dialog open={showDialog} onOpenChange={setShowDialog}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Task</DialogTitle>
-          <DialogDescription>
-            Make changes to your task details here.
+          <DialogTitle>{isNewTask ? "Add" : "Edit"} Task</DialogTitle>
+          <DialogDescription className="w-80">
+            {isNewTask
+              ? "Add a new task here."
+              : "Make changes to your task details here."}
           </DialogDescription>
         </DialogHeader>
 
