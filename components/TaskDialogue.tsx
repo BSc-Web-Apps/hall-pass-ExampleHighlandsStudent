@@ -1,10 +1,9 @@
-import React from "react";
+import * as React from "react";
 import { View } from "react-native";
 import { Task } from "./Task";
 import { Button } from "./ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -29,31 +28,45 @@ export default function TaskDialog({
   showDialog,
   onSave,
 }: TaskDialogProps) {
-  const isNewTask = task.title === "" && task.category === "";
+  const isNewTask = task.id === 0;
 
   const [editedTitle, setEditedTitle] = React.useState(task.title);
   const [editedCategory, setEditedCategory] = React.useState(task.category);
 
-  const { title, category } = task;
+  // Reset internal state when dialog opens or task changes
+  React.useEffect(() => {
+    if (showDialog) {
+      setEditedTitle(task.title);
+      setEditedCategory(task.category);
+    }
+  }, [task, showDialog]);
 
   const handleUpdateTitle = (title: string) => {
     setEditedTitle(title);
   };
+
   const handleUpdateCategory = (category: string) => {
     setEditedCategory(category);
   };
 
   const handleSave = () => {
-    const nextTask = {
-      ...task,
-      title: editedTitle,
-      category: editedCategory,
-    };
+    // Only proceed if title is not empty
+    if (editedTitle.trim()) {
+      // Update the task in the parent component
+      setTask({
+        ...task,
+        title: editedTitle,
+        category: editedCategory,
+      });
 
-    setTask(nextTask);
-    if (onSave) {
-      onSave();
+      // Call the onSave callback if provided
+      if (onSave) {
+        onSave();
+      } else {
+        setShowDialog(false);
+      }
     } else {
+      // Just close the dialog if title is empty
       setShowDialog(false);
     }
   };
@@ -72,28 +85,24 @@ export default function TaskDialog({
 
         <View className="gap-4">
           <Input
-            defaultValue={title}
+            value={editedTitle}
             placeholder="Task title"
             onChangeText={handleUpdateTitle}
           />
           <Input
-            defaultValue={category}
+            value={editedCategory}
             placeholder="Category"
             onChangeText={handleUpdateCategory}
           />
         </View>
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">
-              <Text>Cancel</Text>
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button onPress={handleSave}>
-              <Text>Save changes</Text>
-            </Button>
-          </DialogClose>
+          <Button variant="outline" onPress={() => setShowDialog(false)}>
+            <Text>Cancel</Text>
+          </Button>
+          <Button onPress={handleSave}>
+            <Text>Save changes</Text>
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

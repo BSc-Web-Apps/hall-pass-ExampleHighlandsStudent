@@ -10,17 +10,30 @@ export interface Task {
   category: string;
   isChecked: boolean;
 }
+
 export interface TaskProps {
   task: Task;
+  onUpdate?: (task: Task) => void;
 }
-export default function Task({ task: propTask }: TaskProps) {
+
+export default function Task({ task: propTask, onUpdate }: TaskProps) {
   const [task, setTask] = React.useState(propTask);
   const [showDialog, setShowDialog] = React.useState(false);
   const { title, category, isChecked } = task;
 
   const handleSetChecked = () => {
-    const nextChecked = !task.isChecked;
-    setTask({ ...task, isChecked: nextChecked });
+    const updatedTask = { ...task, isChecked: !task.isChecked };
+    setTask(updatedTask);
+    if (onUpdate) {
+      onUpdate(updatedTask);
+    }
+  };
+
+  const handleTaskUpdate = (updatedTask: Task) => {
+    setTask(updatedTask);
+    if (onUpdate) {
+      onUpdate(updatedTask);
+    }
   };
 
   return (
@@ -47,7 +60,7 @@ export default function Task({ task: propTask }: TaskProps) {
 
       <TaskDialog
         task={task}
-        setTask={setTask}
+        setTask={handleTaskUpdate}
         showDialog={showDialog}
         setShowDialog={setShowDialog}
       />
