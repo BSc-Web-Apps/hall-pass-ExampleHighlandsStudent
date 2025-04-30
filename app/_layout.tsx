@@ -1,14 +1,14 @@
-import "~/global.css";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { PortalHost } from "@rn-primitives/portal";
 import * as React from "react";
 import { Platform } from "react-native";
+import "~/global.css";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { Home as HomeIcon } from "~/lib/icons/Home";
 import { Info } from "~/lib/icons/Info";
 import { useColorScheme } from "~/lib/useColorScheme";
 import HomeScreen from "./index";
 import SettingsScreen from "./settings";
-import { PortalHost } from "@rn-primitives/portal";
 
 const Tab = createBottomTabNavigator();
 
