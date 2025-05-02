@@ -71,7 +71,7 @@ export default function HomeScreen() {
   return (
     <View className="flex-1 flex justify-between bg-background">
       <View className="flex flex-row justify-center">
-        <Text className="pt-20 text-foreground font-bold text-6xl">
+        <Text className="pt-20 pb-8 text-foreground font-bold text-6xl">
           HallPass
         </Text>
       </View>

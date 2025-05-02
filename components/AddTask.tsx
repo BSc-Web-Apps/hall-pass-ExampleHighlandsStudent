@@ -4,6 +4,19 @@ import { Plus } from "~/lib/icons/Plus";
 import TaskDialog from "./TaskDialogue";
 import { Task } from "./Task";
 
+interface AddTaskButtonProps {
+  handleShowDialogue: () => void;
+}
+function AddTaskButton({ handleShowDialogue }: AddTaskButtonProps) {
+  return (
+    <TouchableOpacity onPress={handleShowDialogue}>
+      <View className="w-full h-auto p-3 bg-brand-primary rounded-full flex items-center justify-center border-4 border-background">
+        <Plus size={48} className="text-background" />
+      </View>
+    </TouchableOpacity>
+  );
+}
+
 interface AddTaskProps {
   onAdd: (title: string, category: string) => void;
 }
@@ -16,6 +29,10 @@ export default function AddTask({ onAdd }: AddTaskProps) {
     category: "",
     isChecked: false,
   });
+
+  const handleShowDialog = () => {
+    setShowDialog(true);
+  };
 
   // This function will be called when the user saves a new task
   const handleSave = (updatedTask: Task) => {
@@ -33,11 +50,7 @@ export default function AddTask({ onAdd }: AddTaskProps) {
   return (
     <View className="absolute -bottom-0 z-10">
       <View className="w-24 h-24 p-1 bg-brand-primary rounded-full flex items-center justify-center">
-        <TouchableOpacity onPress={() => setShowDialog(true)}>
-          <View className="w-full h-auto p-3 bg-brand-primary rounded-full flex items-center justify-center border-4 border-background">
-            <Plus size={48} className="text-background" />
-          </View>
-        </TouchableOpacity>
+        <AddTaskButton handleShowDialogue={handleShowDialog} />
       </View>
 
       <TaskDialog
