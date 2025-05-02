@@ -18,7 +18,7 @@ interface TaskDialogProps {
   setTask: (task: Task) => void;
   setShowDialog: (showDialog: boolean) => void;
   showDialog: boolean;
-  onSave?: () => void;
+  onSave?: (updatedTask: Task) => void;
 }
 
 export default function TaskDialog({
@@ -52,19 +52,24 @@ export default function TaskDialog({
   const handleSave = () => {
     // Only proceed if title is not empty
     if (editedTitle.trim()) {
-      // Update the task in the parent component
-      setTask({
+      // Create the updated task
+      const updatedTask = {
         ...task,
         title: editedTitle,
         category: editedCategory,
-      });
+      };
 
-      // Call the onSave callback if provided
-      if (onSave) {
-        onSave();
-      } else {
-        setShowDialog(false);
-      }
+      // First close the dialog
+      setShowDialog(false);
+
+      // Then update the task and call onSave
+      // This ensures the dialog is closed before any state updates
+      setTimeout(() => {
+        setTask(updatedTask);
+        if (onSave) {
+          onSave(updatedTask);
+        }
+      }, 0);
     } else {
       // Just close the dialog if title is empty
       setShowDialog(false);

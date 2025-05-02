@@ -2,6 +2,7 @@ import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Plus } from "~/lib/icons/Plus";
 import TaskDialog from "./TaskDialogue";
+import { Task } from "./Task";
 
 interface AddTaskProps {
   onAdd: (title: string, category: string) => void;
@@ -9,27 +10,23 @@ interface AddTaskProps {
 
 export default function AddTask({ onAdd }: AddTaskProps) {
   const [showDialog, setShowDialog] = React.useState(false);
-  const [title, setTitle] = React.useState("");
-  const [category, setCategory] = React.useState("");
+  const [task, setTask] = React.useState<Task>({
+    id: 0,
+    title: "",
+    category: "",
+    isChecked: false,
+  });
 
   // This function will be called when the user saves a new task
-  const handleSave = () => {
-    if (title.trim()) {
-      // Call the onAdd function passed from the parent component
-      onAdd(title, category);
-
-      // Reset the form fields and close dialog
-      setTitle("");
-      setCategory("");
-      setShowDialog(false);
-    }
+  const handleSave = (updatedTask: Task) => {
+    // Call the onAdd function with the values from the updated task
+    onAdd(updatedTask.title, updatedTask.category);
   };
 
-  // Reset fields when dialog closes
+  // Reset task when dialog closes
   React.useEffect(() => {
     if (!showDialog) {
-      setTitle("");
-      setCategory("");
+      setTask({ id: 0, title: "", category: "", isChecked: false });
     }
   }, [showDialog]);
 
@@ -44,11 +41,8 @@ export default function AddTask({ onAdd }: AddTaskProps) {
       </View>
 
       <TaskDialog
-        task={{ id: 0, title, category, isChecked: false }}
-        setTask={(newTask) => {
-          setTitle(newTask.title);
-          setCategory(newTask.category);
-        }}
+        task={task}
+        setTask={setTask}
         showDialog={showDialog}
         setShowDialog={setShowDialog}
         onSave={handleSave}
