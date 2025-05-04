@@ -1,8 +1,18 @@
 import * as React from "react";
 import { TouchableOpacity, View } from "react-native";
+import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "~/components/ui/dialog";
 import { Text } from "~/components/ui/text";
 import { useTasks } from "~/lib/TaskContext";
+import { Trash } from "~/lib/icons/Trash";
 import TaskDialog from "./TaskDialogue";
 
 export interface Task {
@@ -18,9 +28,10 @@ export interface TaskProps {
 }
 
 export default function Task({ task: propTask, onUpdate }: TaskProps) {
-  const { updateTask } = useTasks();
+  const { updateTask, deleteTask } = useTasks();
   const [task, setTask] = React.useState(propTask);
   const [showDialog, setShowDialog] = React.useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
   const { title, category, isChecked } = task;
 
   const handleSetChecked = () => {
@@ -46,11 +57,24 @@ export default function Task({ task: propTask, onUpdate }: TaskProps) {
     }
   };
 
+  const handleDeleteTask = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    setShowDeleteConfirm(false);
+    try {
+      await deleteTask(task.id);
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+    }
+  };
+
   return (
     <>
       <TouchableOpacity
         className="flex flex-row w-full"
-        delayLongPress={500}
+        delayLongPress={300}
         onLongPress={() => setShowDialog(true)}
       >
         <View className="px-8 pt-8 w-24 h-full">
@@ -72,6 +96,12 @@ export default function Task({ task: propTask, onUpdate }: TaskProps) {
             {category}
           </Text>
         </View>
+        <TouchableOpacity
+          onPress={handleDeleteTask}
+          className="px-4 py-8 justify-center"
+        >
+          <Trash size={24} className="text-destructive" />
+        </TouchableOpacity>
       </TouchableOpacity>
 
       <TaskDialog
@@ -80,6 +110,30 @@ export default function Task({ task: propTask, onUpdate }: TaskProps) {
         showDialog={showDialog}
         setShowDialog={setShowDialog}
       />
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Task</DialogTitle>
+            <DialogDescription className="w-80">
+              Are you sure you want to delete this task? This action cannot be
+              undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onPress={() => setShowDeleteConfirm(false)}
+            >
+              <Text>Cancel</Text>
+            </Button>
+            <Button variant="destructive" onPress={confirmDelete}>
+              <Text>Delete</Text>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
