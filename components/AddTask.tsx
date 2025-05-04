@@ -1,8 +1,9 @@
 import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { Dimensions, TouchableOpacity, View } from "react-native";
 import { Plus } from "~/lib/icons/Plus";
-import TaskDialog from "./TaskDialogue";
+import { useTasks } from "~/lib/TaskContext";
 import { Task } from "./Task";
+import TaskDialog from "./TaskDialogue";
 
 interface AddTaskButtonProps {
   handleShowDialogue: () => void;
@@ -17,44 +18,56 @@ function AddTaskButton({ handleShowDialogue }: AddTaskButtonProps) {
   );
 }
 
-interface AddTaskProps {
-  onAdd: (title: string, category: string) => void;
-}
+export default function AddTask() {
+  const blankTask: Task = { id: 0, title: "", category: "", isChecked: false };
+  const { addTask } = useTasks();
 
-export default function AddTask({ onAdd }: AddTaskProps) {
   const [showDialog, setShowDialog] = React.useState(false);
-  const [task, setTask] = React.useState<Task>({
-    id: 0,
-    title: "",
-    category: "",
-    isChecked: false,
-  });
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [task, setTask] = React.useState(blankTask);
+
+  // Get screen width for centering
+  const screenWidth = Dimensions.get("window").width;
+  const buttonWidth = 40 * 2; // Based on your w-24 class (24 units × 2 sides)
+  const leftPosition = (screenWidth - buttonWidth) / 2;
+
+  const handleSave = async (updatedTask: Task) => {
+    if (!updatedTask.title.trim()) {
+      setShowDialog(false);
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      // Use the context's addTask function
+      await addTask(updatedTask.title, updatedTask.category || "");
+      setTask(blankTask); // Reset the task
+      setShowDialog(false); // Close the dialog after saving
+    } catch (error) {
+      console.error("Failed to add task:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleShowDialog = () => {
     setShowDialog(true);
   };
 
-  // This function will be called when the user saves a new task
-  const handleSave = (updatedTask: Task) => {
-    // Call the onAdd function with the values from the updated task
-    onAdd(updatedTask.title, updatedTask.category);
-  };
-
-  // Reset task when dialog closes
-  React.useEffect(() => {
-    if (!showDialog) {
-      setTask({ id: 0, title: "", category: "", isChecked: false });
-    }
-  }, [showDialog]);
-
   return (
-    <View className="absolute -bottom-0 z-10">
+    <View
+      className="absolute bottom-6"
+      style={{
+        left: leftPosition,
+        zIndex: 50,
+      }}
+    >
       <View className="w-24 h-24 p-1 bg-brand-primary rounded-full flex items-center justify-center">
         <AddTaskButton handleShowDialogue={handleShowDialog} />
       </View>
 
       <TaskDialog
-        task={task}
+        task={blankTask}
         setTask={setTask}
         showDialog={showDialog}
         setShowDialog={setShowDialog}

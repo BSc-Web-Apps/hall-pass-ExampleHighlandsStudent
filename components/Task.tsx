@@ -2,6 +2,7 @@ import * as React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Text } from "~/components/ui/text";
+import { useTasks } from "~/lib/TaskContext";
 import TaskDialog from "./TaskDialogue";
 
 export interface Task {
@@ -17,6 +18,7 @@ export interface TaskProps {
 }
 
 export default function Task({ task: propTask, onUpdate }: TaskProps) {
+  const { updateTask } = useTasks();
   const [task, setTask] = React.useState(propTask);
   const [showDialog, setShowDialog] = React.useState(false);
   const { title, category, isChecked } = task;
@@ -24,15 +26,23 @@ export default function Task({ task: propTask, onUpdate }: TaskProps) {
   const handleSetChecked = () => {
     const updatedTask = { ...task, isChecked: !task.isChecked };
     setTask(updatedTask);
+
+    // Use the provided onUpdate or fall back to context
     if (onUpdate) {
       onUpdate(updatedTask);
+    } else {
+      updateTask(updatedTask);
     }
   };
 
   const handleTaskUpdate = (updatedTask: Task) => {
     setTask(updatedTask);
+
+    // Use the provided onUpdate or fall back to context
     if (onUpdate) {
       onUpdate(updatedTask);
+    } else {
+      updateTask(updatedTask);
     }
   };
 
