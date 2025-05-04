@@ -100,7 +100,7 @@ export default function Task({ task: propTask, onUpdate }: TaskProps) {
           onPress={handleDeleteTask}
           className="px-4 py-8 justify-center"
         >
-          <Trash size={24} className="text-destructive" />
+          <Trash size={24} className="text-brand-primary" />
         </TouchableOpacity>
       </TouchableOpacity>
 
