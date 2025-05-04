@@ -1,10 +1,10 @@
 import * as React from "react";
 import { View } from "react-native";
 import { Task } from "./Task";
+import { BottomDialogContent } from "./ui/bottom-dialog";
 import { Button } from "./ui/button";
 import {
   Dialog,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
@@ -78,7 +78,7 @@ export default function TaskDialog({
 
   return (
     <Dialog open={showDialog} onOpenChange={setShowDialog}>
-      <DialogContent>
+      <BottomDialogContent className="flex gap-12">
         <DialogHeader>
           <DialogTitle>{isNewTask ? "Add" : "Edit"} Task</DialogTitle>
           <DialogDescription className="w-80">
@@ -90,26 +90,35 @@ export default function TaskDialog({
 
         <View className="gap-4">
           <Input
+            className="rounded-full bg-input-background placeholder:text-foreground-transparent"
             value={editedTitle}
             placeholder="Task title"
             onChangeText={handleUpdateTitle}
           />
           <Input
+            className="rounded-full bg-input-background placeholder:text-foreground-transparent"
             value={editedCategory}
             placeholder="Category"
             onChangeText={handleUpdateCategory}
           />
         </View>
 
-        <DialogFooter>
-          <Button variant="outline" onPress={() => setShowDialog(false)}>
+        <DialogFooter className="flex gap-4">
+          <Button
+            className="bg-brand-primary rounded-full"
+            onPress={handleSave}
+          >
+            <Text className="text-foreground">Save changes</Text>
+          </Button>
+          <Button
+            className="rounded-full"
+            variant="outline"
+            onPress={() => setShowDialog(false)}
+          >
             <Text>Cancel</Text>
           </Button>
-          <Button onPress={handleSave}>
-            <Text>Save changes</Text>
-          </Button>
         </DialogFooter>
-      </DialogContent>
+      </BottomDialogContent>
     </Dialog>
   );
 }

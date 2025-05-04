@@ -1,10 +1,10 @@
 import * as React from "react";
 import { TouchableOpacity, View } from "react-native";
+import { BottomDialogContent } from "~/components/ui/bottom-dialog";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
   Dialog,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
@@ -111,17 +111,17 @@ export default function Task({ task: propTask, onUpdate }: TaskProps) {
         setShowDialog={setShowDialog}
       />
 
-      {/* Delete Confirmation Dialog */}
+      {/* Delete Confirmation Dialog - Using Bottom Dialog */}
       <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <DialogContent>
+        <BottomDialogContent className="flex gap-4">
           <DialogHeader>
             <DialogTitle>Delete Task</DialogTitle>
-            <DialogDescription className="w-80">
+            <DialogDescription className="w-80 mb-4">
               Are you sure you want to delete this task? This action cannot be
               undone.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className="flex gap-4">
             <Button
               variant="outline"
               onPress={() => setShowDeleteConfirm(false)}
@@ -132,7 +132,7 @@ export default function Task({ task: propTask, onUpdate }: TaskProps) {
               <Text>Delete</Text>
             </Button>
           </DialogFooter>
-        </DialogContent>
+        </BottomDialogContent>
       </Dialog>
     </>
   );
