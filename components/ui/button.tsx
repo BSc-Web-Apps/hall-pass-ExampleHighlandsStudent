@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary web:hover:opacity-90 active:opacity-90",
+        default: "bg-brand-primary web:hover:opacity-90 active:opacity-90",
         destructive: "bg-destructive web:hover:opacity-90 active:opacity-90",
         outline:
           "border border-input bg-background web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent",
@@ -21,7 +21,7 @@ const buttonVariants = cva(
       size: {
         default: "h-10 px-4 py-2 native:h-12 native:px-5 native:py-3",
         sm: "h-9 rounded-full px-3",
-        lg: "h-11 rounded-full px-8 native:h-14",
+        lg: "h-11 rounded-full px-8 w-full native:h-20",
         icon: "h-10 w-10",
       },
     },
@@ -48,7 +48,7 @@ const buttonTextVariants = cva(
       size: {
         default: "",
         sm: "",
-        lg: "native:text-lg",
+        lg: "native:text-2xl",
         icon: "",
       },
     },

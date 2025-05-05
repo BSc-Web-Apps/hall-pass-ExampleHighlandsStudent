@@ -11,6 +11,7 @@ import { TaskProvider } from "~/lib/TaskContext";
 import { useColorScheme } from "~/lib/useColorScheme";
 import HomeScreen from "./index";
 import SettingsScreen from "./settings";
+import AddTaskTabBtn from "~/components/AddTaskTabBtn";
 
 const Tab = createBottomTabNavigator();
 
@@ -72,7 +73,7 @@ export default function RootLayout() {
           }}
         />
       </Tab.Navigator>
-      <AddTask />
+      <AddTaskTabBtn />
       <PortalHost />
     </TaskProvider>
   );
