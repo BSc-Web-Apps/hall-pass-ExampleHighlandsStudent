@@ -8,5 +8,4 @@ module.exports = {
   transformIgnorePatterns: [
     "node_modules/(?!(react-native|@react-native|@rn-primitives|react-native-.*)/)",
   ],
-  setupFiles: ["./tests/setup.js"],
 };

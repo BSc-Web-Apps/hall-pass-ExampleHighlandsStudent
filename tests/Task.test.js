@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react-native";
+import { render, screen, userEvent } from "@testing-library/react-native";
 import Task from "../components/Task"; // Adjust path as needed
 
 // Mock any components or contexts used by Task
@@ -28,7 +28,7 @@ describe("Task", () => {
     expect(categoryElement).toBeTruthy();
   });
 
-  test("toggles completion status when pressed", () => {
+  test("toggles completion status when pressed", async () => {
     const mockToggle = jest.fn(); // Create a mock function
     const task = {
       id: 1,
@@ -41,9 +41,39 @@ describe("Task", () => {
 
     const checkbox = screen.getByTestId("checkbox"); // Find the checkbox element
 
-    fireEvent(checkbox, "press");
+    const user = userEvent.setup();
+    await user.press(checkbox);
 
     // Check if our mock function was called
     expect(mockToggle).toHaveBeenCalled();
+
+    // Check if our mock function was called with the correct arguments
+    expect(mockToggle).toHaveBeenCalledWith({
+      ...task,
+      isChecked: true, // The checkbox should toggle from false to true
+    });
+  });
+
+  test("toggles from checked to unchecked when pressed", async () => {
+    const mockToggle = jest.fn();
+    const task = {
+      id: 1,
+      title: "Test Task",
+      category: "Test Category",
+      isChecked: true, // Starting as checked
+    };
+
+    render(<Task task={task} onUpdate={mockToggle} />);
+
+    const checkbox = screen.getByTestId("checkbox");
+
+    const user = userEvent.setup();
+    await user.press(checkbox);
+
+    // Check if our mock function was called with the correct arguments
+    expect(mockToggle).toHaveBeenCalledWith({
+      ...task,
+      isChecked: false, // The checkbox should toggle from true to false
+    });
   });
 });
