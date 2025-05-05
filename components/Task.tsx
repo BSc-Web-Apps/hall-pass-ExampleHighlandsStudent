@@ -86,13 +86,17 @@ export default function Task({ task: propTask, onUpdate }: TaskProps) {
         </View>
         <View className="py-4 flex gap-1 flex-1 h-full border-b border-foreground-transparent">
           <Text
-            className={`${
-              isChecked ? "line-through text-stone-200/50" : "text-foreground"
+            className={`text-foreground ${
+              isChecked ? "line-through opacity-60" : ""
             } text-xl`}
           >
             {title}
           </Text>
-          <Text className="text-foreground-transparent text-xl">
+          <Text
+            className={`text-foreground-transparent text-xl ${
+              isChecked ? "line-through opacity-60" : ""
+            }`}
+          >
             {category}
           </Text>
         </View>
